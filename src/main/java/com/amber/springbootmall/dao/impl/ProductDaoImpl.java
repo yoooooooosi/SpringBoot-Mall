@@ -47,7 +47,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
-        String sql = "INSERT INTO product(product_name,category,price,stock,description,image_url,created_date,last_modified_date) VALUES(:productName,:category,:price,:stock,:description,:imageUrl,:created_date,:last_modified_date)";
+        String sql = "INSERT INTO product(product_name,category,price,stock,description,image_url,created_date,last_modified_date) VALUES(:productName,:category,:price,:stock,:description,:imageUrl,:createdDate,:lastModifiedDate)";
 
         Map<String, Object> map = new HashMap<>();
         map.put("productName", productRequest.getProductName());
@@ -58,8 +58,8 @@ public class ProductDaoImpl implements ProductDao {
         map.put("imageUrl", productRequest.getImageUrl());
 
         Date now = new Date();
-        map.put("created_date", now);
-        map.put("last_modified_date", now);
+        map.put("createdDate", now);
+        map.put("lastModifiedDate", now);
 
         //當資料庫的id為自動生成的話，可以使用KeyHolder 物件中的GeneratedKeyHolder方法來抓取自動生成的id值
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -70,5 +70,25 @@ public class ProductDaoImpl implements ProductDao {
         //獲取資料庫中自動生成的主鍵，並將她轉型為int
         int productId = keyHolder.getKey().intValue();
         return productId;
+    }
+
+    @Override
+    public void updateProduct(Integer productId, ProductRequest productRequest) {
+
+        String sql = "UPDATE product SET product_name = :productName,category = :category,image_url =:imageUrl,price =:price, stock =:stock,description = :description,last_modified_date =:lastModifiedDate WHERE product_id = :productId";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId", productId);
+        map.put("productName", productRequest.getProductName());
+        map.put("category", productRequest.getCategory().name());
+        map.put("imageUrl", productRequest.getImageUrl());
+        map.put("price", productRequest.getPrice());
+        map.put("stock", productRequest.getStock());
+        map.put("description", productRequest.getDescription());
+
+        map.put("lastModifiedDate", new Date());
+
+        namedParameterJdbcTemplate.update(sql, map);
+
     }
 }
