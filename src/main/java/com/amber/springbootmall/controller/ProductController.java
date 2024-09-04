@@ -23,8 +23,12 @@ public class ProductController {
     //查詢商品列表 (查詢條件、排序、分頁)
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts(
+            //查詢條件
             @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            //排序
+            @RequestParam(defaultValue = "created_date") String orderBy,
+            @RequestParam(defaultValue = "desc") String sort
             ) {
         //使用@RequestParam取得從前端回傳的參數ProductCategory category(來查看想要查詢的類別) -> required = false 不一定要回傳
 
@@ -32,6 +36,8 @@ public class ProductController {
         ProductQueryParams params = new ProductQueryParams();
         params.setCategory(category);
         params.setSearch(search);
+        params.setOrderBy(orderBy);
+        params.setSort(sort);
 
         List<Product> productList = productService.getProducts(params);
 
