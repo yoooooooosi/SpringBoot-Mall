@@ -6,13 +6,17 @@ import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 import com.amber.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 public class ProductController {
 
@@ -28,7 +32,10 @@ public class ProductController {
             @RequestParam(required = false) String search,
             //排序
             @RequestParam(defaultValue = "created_date") String orderBy,
-            @RequestParam(defaultValue = "desc") String sort
+            @RequestParam(defaultValue = "desc") String sort,
+            //分頁
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,//取得幾筆數據
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset//跳過多少筆資料
             ) {
         //使用@RequestParam取得從前端回傳的參數ProductCategory category(來查看想要查詢的類別) -> required = false 不一定要回傳
 
@@ -38,6 +45,8 @@ public class ProductController {
         params.setSearch(search);
         params.setOrderBy(orderBy);
         params.setSort(sort);
+        params.setLimit(limit);
+        params.setOffset(offset);
 
         List<Product> productList = productService.getProducts(params);
 
