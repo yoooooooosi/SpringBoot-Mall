@@ -2,6 +2,7 @@ package com.amber.springbootmall.dao.impl;
 
 import com.amber.springbootmall.constant.ProductCategory;
 import com.amber.springbootmall.dao.ProductDao;
+import com.amber.springbootmall.dto.ProductQueryParams;
 import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 import com.amber.springbootmall.rowmapper.ProductRowMapper;
@@ -103,21 +104,21 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<Product> getProducts(ProductCategory category,String search) {
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
 
         //WHERE 1=1 對於查詢結果是沒有影響的，主要是壤後面的sql能夠去做拼接
         String sql = "SELECT * FROM product WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
-        if(category != null){
+        if(productQueryParams.getCategory() != null){
             sql = sql + " AND  category = :category";
-            map.put("category", category.name());
+            map.put("category", productQueryParams.getCategory().name());
         }
 
-        if(search != null){
+        if(productQueryParams.getSearch() != null){
             sql = sql + " AND  product_name  LIKE :search";
-            map.put("search", "%" + search + "%");
+            map.put("search", "%" + productQueryParams.getSearch() + "%");
         }
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map, new ProductRowMapper());

@@ -1,6 +1,7 @@
 package com.amber.springbootmall.controller;
 
 import com.amber.springbootmall.constant.ProductCategory;
+import com.amber.springbootmall.dto.ProductQueryParams;
 import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 import com.amber.springbootmall.service.ProductService;
@@ -26,7 +27,13 @@ public class ProductController {
             @RequestParam(required = false) String search
             ) {
         //使用@RequestParam取得從前端回傳的參數ProductCategory category(來查看想要查詢的類別) -> required = false 不一定要回傳
-        List<Product> productList = productService.getProducts(category,search);
+
+        //特別設置一個類別存放需要回傳的參數類別(以避免造成錯誤以及提升優化)
+        ProductQueryParams params = new ProductQueryParams();
+        params.setCategory(category);
+        params.setSearch(search);
+
+        List<Product> productList = productService.getProducts(params);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }

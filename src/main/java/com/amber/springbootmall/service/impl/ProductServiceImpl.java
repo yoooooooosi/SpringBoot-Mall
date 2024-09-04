@@ -1,7 +1,8 @@
 package com.amber.springbootmall.service.impl;
 
-import com.amber.springbootmall.constant.ProductCategory;
+
 import com.amber.springbootmall.dao.ProductDao;
+import com.amber.springbootmall.dto.ProductQueryParams;
 import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 import com.amber.springbootmall.service.ProductService;
@@ -37,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts(ProductCategory category,String search) {
-        return productDao.getProducts(category,search);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return productDao.getProducts(productQueryParams);
     }
 }
