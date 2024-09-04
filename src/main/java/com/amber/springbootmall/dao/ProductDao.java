@@ -1,5 +1,6 @@
 package com.amber.springbootmall.dao;
 
+import com.amber.springbootmall.constant.ProductCategory;
 import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 
@@ -11,5 +12,5 @@ public interface ProductDao {
     Integer createProduct(ProductRequest productRequest);
     void updateProduct(Integer productId, ProductRequest productRequest);
     void deleteProduct(Integer productId);
-    List<Product> getProducts();
+    List<Product> getProducts(ProductCategory category,String search);
 }

@@ -1,5 +1,6 @@
 package com.amber.springbootmall.controller;
 
+import com.amber.springbootmall.constant.ProductCategory;
 import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 import com.amber.springbootmall.service.ProductService;
@@ -20,8 +21,12 @@ public class ProductController {
 
     //查詢商品列表 (查詢條件、排序、分頁)
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getAllProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+            ) {
+        //使用@RequestParam取得從前端回傳的參數ProductCategory category(來查看想要查詢的類別) -> required = false 不一定要回傳
+        List<Product> productList = productService.getProducts(category,search);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
