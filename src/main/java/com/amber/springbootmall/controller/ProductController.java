@@ -5,6 +5,7 @@ import com.amber.springbootmall.dto.ProductQueryParams;
 import com.amber.springbootmall.dto.ProductRequest;
 import com.amber.springbootmall.model.Product;
 import com.amber.springbootmall.service.ProductService;
+import com.amber.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -26,7 +27,7 @@ public class ProductController {
 
     //查詢商品列表 (查詢條件、排序、分頁)
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts(
+    public ResponseEntity<Page<Product>> getAllProducts(
             //查詢條件
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -50,7 +51,17 @@ public class ProductController {
 
         List<Product> productList = productService.getProducts(params);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        //查詢總數
+        Integer total = productService.countProduct(params);
+
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     //查詢單筆商品
