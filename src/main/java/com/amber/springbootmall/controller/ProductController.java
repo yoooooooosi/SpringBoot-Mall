@@ -9,11 +9,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+
+    //查詢商品列表 (查詢條件、排序、分頁)
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> productList = productService.getProducts();
+
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
+    }
 
     //查詢單筆商品
     @GetMapping("/products/{productId}")
@@ -67,6 +78,7 @@ public class ProductController {
         }
     }
 
+    //刪除單筆商品
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<Product> deleteProduct(@PathVariable Integer productId){
 
@@ -76,5 +88,8 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+
+
 
 }

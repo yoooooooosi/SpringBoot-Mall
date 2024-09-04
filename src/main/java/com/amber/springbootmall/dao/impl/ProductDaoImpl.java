@@ -100,4 +100,15 @@ public class ProductDaoImpl implements ProductDao {
         map.put("productId", productId);
         namedParameterJdbcTemplate.update(sql, map);
     }
+
+    @Override
+    public List<Product> getProducts() {
+
+        String sql = "SELECT * FROM product";
+
+        List<Product> productList = namedParameterJdbcTemplate.query(sql, new ProductRowMapper());
+
+
+        return productList;
+    }
 }
