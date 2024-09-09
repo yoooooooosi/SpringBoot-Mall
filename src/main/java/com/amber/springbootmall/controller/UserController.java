@@ -1,5 +1,6 @@
 package com.amber.springbootmall.controller;
 
+import com.amber.springbootmall.dto.UserLoginRequest;
 import com.amber.springbootmall.dto.UserRegisterRequest;
 import com.amber.springbootmall.model.User;
 import com.amber.springbootmall.service.UserService;
@@ -26,5 +27,14 @@ public class UserController {
         User user = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    //登入
+    @PostMapping("users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+
+        User user = userService.login(userLoginRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }
