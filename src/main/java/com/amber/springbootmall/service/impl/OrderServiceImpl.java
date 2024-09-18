@@ -59,4 +59,18 @@ public class OrderServiceImpl implements OrderService {
 
         return orderId;
     }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        //取得訂單資料
+        Order order = orderDao.getOrderById(orderId);
+
+        //取得訂單詳細資料
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
+
+        //將訂單與訂單詳細資料合併
+        order.setOrderItemList(orderItemList);
+
+        return order;
+    }
 }
