@@ -5,6 +5,7 @@ import com.amber.springbootmall.dao.ProductDao;
 import com.amber.springbootmall.dao.UserDao;
 import com.amber.springbootmall.dto.BuyItem;
 import com.amber.springbootmall.dto.CreateOrderRequest;
+import com.amber.springbootmall.dto.OrderQueryParams;
 import com.amber.springbootmall.model.Order;
 import com.amber.springbootmall.model.OrderItem;
 import com.amber.springbootmall.model.Product;
@@ -104,5 +105,23 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItemList(orderItemList);
 
         return order;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList  = orderDao.getOrders(orderQueryParams) ;
+
+        //同時要回傳該筆訂單及訂單詳細資料
+        for(Order order : orderList){
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
     }
 }
