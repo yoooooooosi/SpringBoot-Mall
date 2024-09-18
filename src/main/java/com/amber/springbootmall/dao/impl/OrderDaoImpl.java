@@ -116,6 +116,7 @@ public class OrderDaoImpl implements OrderDao {
         //查詢條件
         sql = addFilteringSql(sql,map,orderQueryParams);
 
+
         //排序
         sql = sql + " ORDER BY created_date DESC ";
 
